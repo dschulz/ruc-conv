@@ -10,7 +10,7 @@ Las pruebas con _Virtual Threads_ fueron aburridas y terminaron en este rejunte 
 1. Recibe una lista de archivos Zip ([los que publica la SET](https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/listado-de-ruc-con-sus-equivalencias)).
 2. Abre los archivos de texto dentro del zip, recorre el contenido y extrae, línea por línea, cada entrada.
 3. Los registros que tienen estado `CANCELADO` se descartan, solo se conservan los que tienen estado `ACTIVO` o `SUSPENSION TEMPORAL`.
-4. Cada entrada es comparada con una lista ridículamente larga de expresiones regulares para encontrar inconsistencias y si se puede, se remienda de una manera no destructiva.
+4. Cada entrada es comparada con [una lista ridículamente larga de expresiones regulares](https://github.com/dschulz/ruc-conv/blob/533484d81a4ebe4baefa75e859bfa83dfa6a50c6/src/main/java/com/dschulz/rucconv/task/ObtenerContribuyentesDesdeZipTask.java#L30) para encontrar inconsistencias y si se puede, se remienda de una manera no destructiva.
 5. Se conserva la denominación original y en una columna separada la denominación remendada (si coincidió con uno de los patrones de texto).
 6. La lista queda cargada en memoria y exhibida. Es cuando se puede exportar a varios formatos (SQL, JSON, CSV, etc.).
 
@@ -58,7 +58,7 @@ Pero hay maneras mas aparatosas, por ejemplo como un componente para [Apache Cam
 
 ## Lo que falta hacer
 
-* El SQL exportado para el dialecto SQL de Oracle no fue probado.
+* El SQL exportado para el dialecto SQL de Oracle no fue probado y lo mas probable es que no funcione sin modificar a mano.
 * Agregar mas patrones de texto para corregir mas entradas defectuosas.
 * Recuperar registros que se descartan durante el parseo. Son alrededor de 10.
 * Implementar esto como un backend y no como una aplicación de escritorio.
