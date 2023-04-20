@@ -58,6 +58,7 @@ Pero hay maneras mas aparatosas, por ejemplo como un componente para [Apache Cam
 
 ## Lo que falta hacer
 
+* Agregar GitHub Actions para construir paquetes distribuibles.
 * El SQL exportado para el dialecto SQL de Oracle no fue probado y lo mas probable es que no funcione sin modificar a mano.
 * Agregar mas patrones de texto para corregir mas entradas defectuosas.
 * Recuperar registros que se descartan durante el parseo. Son alrededor de 10.
