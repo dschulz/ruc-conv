@@ -1,6 +1,6 @@
 # ruc-conv
 
-## Aplicación para depurar listado de RUCs de la SET.
+## Aplicación de escritorio para depurar listado de RUCs de la SET.
 
 Este experimento fue inicialmente una prueba para jugar con un feature de versiones recientes de Java (_Virtual Threads_).
 Las pruebas con _Virtual Threads_ fueron aburridas y terminaron en este rejunte que usé para poder cocinar una base de datos `SQLite3` con el listado de RUCs razonablemente limpio.
