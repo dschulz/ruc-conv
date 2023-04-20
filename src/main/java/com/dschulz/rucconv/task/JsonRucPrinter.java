@@ -3,6 +3,7 @@ package com.dschulz.rucconv.task;
 import com.dschulz.rucconv.model.Contribuyente;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.Iterator;
@@ -12,6 +13,10 @@ public class JsonRucPrinter extends PrintWriter implements RecordListExporter<Co
 
     public JsonRucPrinter(String fileName, Charset charset) throws IOException {
         super(fileName, charset);
+    }
+
+    public JsonRucPrinter(OutputStream out, boolean autoFlush) {
+        super(out, autoFlush);
     }
 
     @Override

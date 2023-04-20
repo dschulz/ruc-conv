@@ -21,6 +21,7 @@ import org.controlsfx.control.Notifications;
 import org.controlsfx.control.TaskProgressView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPOutputStream;
 
 
 public class ConversorController {
@@ -204,6 +206,58 @@ public class ConversorController {
             exportThread.start();
         });
 
+        var exportarGzippedPostgres = nuevoItem("Exportar SQL Gzipeado para PostgreSQL", () -> {
+
+            File salida = getOutputFile("rucs-postgresql.sql.gz");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
+                     PostgresDialectRucPrinter exporter = new PostgresDialectRucPrinter(fos,true)
+                ) {
+                    exporter.export(rucsTableView.getItems());
+                    exporter.flush(); // escribir
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+        var exportarH2 = nuevoItem("Exportar SQL para H2", () -> {
+
+            File salida = getOutputFile("rucs-h2db.sql");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (H2DialectRucPrinter exporter = new H2DialectRucPrinter(salida.getAbsolutePath(), StandardCharsets.UTF_8)) {
+                    exporter.export(rucsTableView.getItems());
+                    exporter.flush(); // escribir
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
 
         var exportarJson = nuevoItem("Exportar JSON", () -> {
 
@@ -214,6 +268,33 @@ public class ConversorController {
             Thread exportThread = new Thread(() -> {
 
                 try (JsonRucPrinter exporter = new JsonRucPrinter(salida.getAbsolutePath(), StandardCharsets.UTF_8)) {
+                    exporter.export(rucsTableView.getItems());
+                    exporter.flush(); // escribir
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados a JSON")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+        var exportarGzippedJson = nuevoItem("Exportar JSON.GZ", () -> {
+
+            File salida = getOutputFile("rucs.json.gz");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
+                     JsonRucPrinter exporter = new JsonRucPrinter(fos,true)
+                ) {
                     exporter.export(rucsTableView.getItems());
                     exporter.flush(); // escribir
                 } catch (IOException e) {
@@ -256,14 +337,45 @@ public class ConversorController {
         });
 
 
+        var exportarGzippedCsv =  nuevoItem("Exportar CSV.GZ", () -> {
+
+            File salida = getOutputFile("rucs.csv.gz");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
+                     CsvRucPrinter exporter = new CsvRucPrinter(fos,true)
+                ){
+                    exporter.export(rucsTableView.getItems());
+                    exporter.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados a CSV")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+
         return new MenuItem[]{
             exportarSqlite,
-            exportarJson,
-            exportarCsv,
+            exportarH2,
             exportarOracle,
             exportarPostgres,
-            new MenuItem("(n/i) Exportar a archivo Parquet"),
-        };
+            exportarGzippedPostgres,
+            exportarJson,
+            exportarGzippedJson,
+            exportarCsv,
+            exportarGzippedCsv,
+         };
     }
 
     private MenuItem[] seleccionMenuItems() {
@@ -363,8 +475,8 @@ public class ConversorController {
 
     private void procesarArchivos(List<File> files) {
 
-        //ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        // ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
         TaskProgressView<ObtenerContribuyentesDesdeZipTask> taskProgressView = new TaskProgressView<>();
         List<ObtenerContribuyentesDesdeZipTask> tasks = new ArrayList<>();
 

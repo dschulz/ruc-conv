@@ -3,6 +3,7 @@ package com.dschulz.rucconv.task;
 import com.dschulz.rucconv.model.Contribuyente;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -11,6 +12,10 @@ public class CsvRucPrinter extends PrintWriter implements RecordListExporter<Con
 
     public CsvRucPrinter(String fileName, Charset charset) throws IOException {
         super(fileName, charset);
+    }
+
+    public CsvRucPrinter(OutputStream out, boolean autoFlush) {
+        super(out, autoFlush);
     }
 
     @Override
