@@ -64,6 +64,11 @@ Pero hay maneras mas aparatosas, por ejemplo como un componente para [Apache Cam
 * Implementar esto como un backend y no como una aplicación de escritorio.
 
 # Construir paquete binario
+Se necesita tener un JDK versión `20` instalado. Cualquier distribución debería funcionar indistintamente.
+
+* [Oracle](https://www.oracle.com/java/technologies/downloads/)
+* [Eclipse Temurin](https://adoptium.net/es/temurin/releases/?version=20)
+* Cualquier otra siempre que sea 20+
 
 Se puede construir la aplicación usando [jlink](https://docs.oracle.com/javase/9/tools/jlink.htm) de manera que no se necesita tener Java instalado en el sistema donde se vaya a usar.
 
@@ -80,7 +85,7 @@ Se puede construir la aplicación usando [jlink](https://docs.oracle.com/javase/
 mvnw.bat clean verify javafx:jlink
 ```
 
-Un paquete `zip` se crea en el directorio `target` y contiene la aplicación enlazada con un `JRE` incluido.
+Un paquete `zip` se crea en el directorio `target` y contiene la aplicación enlazada con un `JRE` incluido. 
 El paquete se puede descomprimir en cualquier directorio y luego la aplicación se puede ejecutar directamente desde ahí. El ejecutable se llama `rucconv` y se encuentra en el directorio `bin/`.
 
 
