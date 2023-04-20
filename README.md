@@ -7,6 +7,9 @@ Las pruebas con _Virtual Threads_ fueron aburridas y terminaron en este rejunte 
 
 ## ¿Qué hace la aplicación?
 
+![Captura de pantalla](https://github.com/dschulz/ruc-conv/blob/main/screenshot.png?raw=true)
+
+
 1. Recibe una lista de archivos Zip ([los que publica la SET](https://www.set.gov.py/portal/PARAGUAY-SET/InformesPeriodicos?folder-id=repository:collaboration:/sites/PARAGUAY-SET/categories/SET/Informes%20Periodicos/listado-de-ruc-con-sus-equivalencias)).
 2. Abre los archivos de texto dentro del zip, recorre el contenido y extrae, línea por línea, cada entrada.
 3. Los registros que tienen estado `CANCELADO` se descartan, solo se conservan los que tienen estado `ACTIVO` o `SUSPENSION TEMPORAL`.
