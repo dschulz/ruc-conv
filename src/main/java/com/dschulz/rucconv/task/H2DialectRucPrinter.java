@@ -3,6 +3,7 @@ package com.dschulz.rucconv.task;
 import com.dschulz.rucconv.model.Contribuyente;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
@@ -11,6 +12,10 @@ import java.util.List;
 public class H2DialectRucPrinter extends PrintWriter implements RecordListExporter<Contribuyente> {
     public H2DialectRucPrinter(String fileName, Charset charset) throws IOException {
         super(fileName, charset);
+    }
+
+    public H2DialectRucPrinter(OutputStream out, boolean autoFlush) {
+        super(out, autoFlush);
     }
 
     public void export(List<Contribuyente> lista) {

@@ -3,12 +3,12 @@ package com.dschulz.rucconv.task;
 import com.dschulz.rucconv.model.Contribuyente;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -18,6 +18,10 @@ import java.util.Locale;
 public class SqliteRucPrinter extends PrintWriter implements RecordListExporter<Contribuyente> {
     public SqliteRucPrinter(String fileName, Charset charset) throws IOException {
         super(fileName, charset);
+    }
+
+    public SqliteRucPrinter(OutputStream out, boolean autoFlush) {
+        super(out, autoFlush);
     }
 
     public void export(List<Contribuyente> lista) {
