@@ -26,7 +26,7 @@ Aproximadamente `650 mil` de un total de `1.032.969` registros son remendados a 
 
 Algunas razones:
 
-- Las personas y razones sociales tienen nombre propio por una razón. Los nombres propios se debe escribir bien, y con mas razón si se trata de una institución estatal.
+- Las personas y razones sociales tienen nombre propio por una razón. Los nombres propios se deben escribir bien, y con mas razón si se trata de una institución estatal.
 - Es 2023, `Unicode 2.0` existe desde _1996_. Nada puede justificar que en miles de sistemas de gestión haya nombres de personas de apellido QUIÑÓNEZ, ACUÑA o NÚÑEZ aparezcan como `"QUIÃ¿Â¿¿ONEZ"`, `"ACUÃ¿â¿¿A"` o `"NUÃ¿â¿¿EZ"`. No solo es ridículo y vergonzoso, también es irrespetuoso.
 - La SET publica la misma basura desde que recuerdo y no tiene sentido esperar que arreglen lo que publican.
 
