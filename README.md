@@ -58,6 +58,7 @@ Pero hay maneras mas aparatosas, por ejemplo como un componente para [Apache Cam
 
 ## Lo que falta hacer
 
+* El SQL exportado para el dialecto SQL de Oracle no fue probado.
 * Agregar mas patrones de texto para corregir mas entradas defectuosas.
 * Recuperar registros que se descartan durante el parseo. Son alrededor de 10.
 * Implementar esto como un backend y no como una aplicación de escritorio.
