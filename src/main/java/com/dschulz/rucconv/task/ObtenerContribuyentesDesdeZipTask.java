@@ -893,16 +893,17 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
                     continue;
                 }
 
-                if (campos[STATUS.pos].equalsIgnoreCase("bloqueado")) {
-                    //System.err.println("RUC bloqueado");
-                    continue;
-                }
+//                if (campos[STATUS.pos].equalsIgnoreCase("bloqueado")) {
+//                    //System.err.println("RUC bloqueado");
+//                    continue;
+//                }
 
-                if (campos[STATUS.pos].equalsIgnoreCase("cancelado")) {
+                // Hay "CANCELADO" y "CANCELADO DEFINITIVO"
+                String estado = campos[STATUS.pos].toUpperCase();
+                if (estado.startsWith("CANCE")){
                     //System.err.println("RUC cancelado");
                     continue;
                 }
-
 
                 parsed.add(lineaConverter.apply(campos));
             }

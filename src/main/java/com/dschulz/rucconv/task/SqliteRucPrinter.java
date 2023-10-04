@@ -50,19 +50,19 @@ CREATE TABLE IF NOT EXISTS meta (
 -- Opcional: Indice full-text para búsquedas eficientes - activo por defecto
 CREATE VIRTUAL TABLE ruc_fts USING FTS5 (
    doc,
-   denominacionCorregida,
+   denominacion,
    tokenize = 'unicode61'
 );
 """;
 
         String ftsLoad = """
 -- Opcional - activo por defecto
-INSERT INTO ruc_fts (doc, denominacionCorregida) SELECT doc, denominacionCorregida FROM ruc;
+INSERT INTO ruc_fts (doc, denominacion) SELECT doc, denominacion FROM ruc;
 """;
 
         String metaLoad = String.format("""
-            INSERT INTO meta (k,v) VALUES ("NumRegistros", "%s" );
-            INSERT INTO meta (k,v) VALUES ("Actualizado", "%s");
+            INSERT INTO meta (k,v) VALUES ('NumRegistros', '%s' );
+            INSERT INTO meta (k,v) VALUES ('Actualizado', '%s');
             """, numberFormat().format(lista.size()), INSTANTE);
 
 
@@ -83,23 +83,26 @@ INSERT INTO ruc_fts (doc, denominacionCorregida) SELECT doc, denominacionCorregi
             this.println(ddl);
             this.println(ftsDdl);
 
-            String plantilla = "INSERT INTO ruc (doc, dv, denominacionOriginal, denominacionCorregida, estado) VALUES (\"%s\", %d, \"%s\", %s, \"%s\");";
+            String plantilla = "INSERT INTO ruc (doc, dv, denominacionOriginal, denominacionCorregida, estado) VALUES (%s, %d, %s, %s, '%s');";
 
-            for (Contribuyente c : lista) {
+            for (Contribuyente c : lista){
+
                 String sql = String.format(plantilla,
-                    c.getRuc(),
+                    singleQuote(c.getRuc()),
                     c.getVerificador(),
-                    c.getDenominacion().replaceAll("\"", ""),
-                    (c.getDenominacionCorregida()!=null ) ? "\"" + c.getDenominacionCorregida() + "\"" : "null",
+                    singleQuote(c.getDenominacion()),
+                    (c.getDenominacionCorregida()!=null ) ? singleQuote( c.getDenominacionCorregida() ) : "null" ,
                     c.getEstado()
                 );
                 this.println(sql);
             }
+
+
             this.println("UPDATE ruc SET denominacionCorregida = denominacionOriginal WHERE denominacionCorregida IS NULL;");
+            this.println("-- Opcional: comentar las siguientes lineas para evitar que se elimine la columna original ");
+            this.println("ALTER TABLE ruc DROP COLUMN denominacionOriginal ;");
+            this.println("ALTER TABLE ruc RENAME COLUMN denominacionCorregida TO denominacion;");
             this.println(ftsLoad);
-            this.println("-- Opcional: ");
-            this.println("-- ALTER TABLE ruc DROP COLUMN denominacionOriginal ;");
-            this.println("-- ALTER TABLE ruc RENAME COLUMN denominacionCorregida TO denominacion;");
             this.println();
 
         });
@@ -115,6 +118,11 @@ INSERT INTO ruc_fts (doc, denominacionCorregida) SELECT doc, denominacionCorregi
         symbols.setGroupingSeparator('.');
 
         return new DecimalFormat ("###,###", symbols);
+    }
+
+    private String singleQuote(String orig){
+        return "'" +
+            orig.replaceAll("'", "''") + "'";
     }
 
     private void surroundWithTransaction(SQLWriter r) {

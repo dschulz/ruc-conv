@@ -125,6 +125,60 @@ public class ConversorController {
 
     private MenuItem[] exportarMenuItems() {
 
+        var exportarSqliteSimple = nuevoItem("SQL para SQLite3 (simple)", () -> {
+
+            File salida = getOutputFile("rucs-sqlite3-simple.sql");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (SqliteSimpleRucPrinter rucPrinter = new SqliteSimpleRucPrinter(salida.getAbsolutePath(), StandardCharsets.UTF_8)) {
+                    rucPrinter.export(rucsTableView.getItems());
+                    rucPrinter.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+        var exportarGzippedSqliteSimple = nuevoItem("SQL.gz para SQLite3 (simple)", () -> {
+
+            File salida = getOutputFile("rucs-sqlite3-simple.sql.gz");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (
+                    GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
+                    SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos,true)
+                ) {
+                    rucPrinter.export(rucsTableView.getItems());
+                    rucPrinter.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+
         var exportarSqlite = nuevoItem("SQL para SQLite3", () -> {
 
             File salida = getOutputFile("rucs-sqlite3.sql");
@@ -161,6 +215,60 @@ public class ConversorController {
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
                     SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos,true)
+                ) {
+                    rucPrinter.export(rucsTableView.getItems());
+                    rucPrinter.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+
+        var exportarMsSqlServer = nuevoItem("SQL para MS SqlServer", () -> {
+
+            File salida = getOutputFile("rucs-mssqlserver.sql");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (MSSqlServerRucPrinter rucPrinter = new MSSqlServerRucPrinter(salida.getAbsolutePath(), StandardCharsets.UTF_8)) {
+                    rucPrinter.export(rucsTableView.getItems());
+                    rucPrinter.flush();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Platform.runLater(() -> {
+                    Notifications.create()
+                        .title("Finalizado")
+                        .text("Registros exportados.")
+                        .position(Pos.TOP_CENTER)
+                        .showInformation();
+                });
+            });
+            exportThread.start();
+        });
+
+        var exportarGzippedMsSqlServer = nuevoItem("SQL.gz para MS SqlServer", () -> {
+
+            File salida = getOutputFile("rucs-mssqlserver.sql.gz");
+            if(null==salida)
+                return;
+
+            Thread exportThread = new Thread(() -> {
+
+                try (
+                    GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
+                    MSSqlServerRucPrinter rucPrinter = new MSSqlServerRucPrinter(fos,true)
                 ) {
                     rucPrinter.export(rucsTableView.getItems());
                     rucPrinter.flush();
@@ -451,14 +559,18 @@ public class ConversorController {
             // Plain
             exportarJson,
             exportarCsv,
+            exportarSqliteSimple,
             exportarSqlite,
+            exportarMsSqlServer,
             exportarPostgres,
             exportarH2,
             exportarOracle,
             // Gzipped
             exportarGzippedJson,
             exportarGzippedCsv,
+            exportarGzippedSqliteSimple,
             exportarGzippedSqlite,
+            exportarGzippedMsSqlServer,
             exportarGzippedPostgres,
             exportarGzippedH2,
             exportarGzippedOracle
@@ -578,7 +690,6 @@ public class ConversorController {
 
         taskProgressView.getTasks().addAll(tasks);
 
-
         final Popup popup = new Popup();
         popup.setAutoFix(true);
         popup.setConsumeAutoHidingEvents(true);
@@ -595,7 +706,7 @@ public class ConversorController {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                executorService.close();
+               // executorService.close();
                 Platform.runLater(popup::hide);
                 Platform.runLater(() -> {
                     ObservableList<Contribuyente> colectados = FXCollections.observableArrayList();

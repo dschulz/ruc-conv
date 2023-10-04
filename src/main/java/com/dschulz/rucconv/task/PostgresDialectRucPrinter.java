@@ -74,11 +74,11 @@ public class PostgresDialectRucPrinter extends PrintWriter implements RecordList
             "'";
     }
 
-    private String doubleQuote(String orig){
-        return "\"" +
-            orig.replaceAll("\"", "\\\\\"" ) +
-            "\"";
-    }
+//    private String doubleQuote(String orig){
+//        return "\"" +
+//            orig.replaceAll("\"", "\\\\\"" ) +
+//            "\"";
+//    }
 
 
     private void surroundWithTransaction(SQLWriter r) {
