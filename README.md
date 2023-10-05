@@ -89,8 +89,10 @@ Se puede construir la aplicación usando [jlink](https://docs.oracle.com/javase/
 mvnw.bat clean verify javafx:jlink
 ```
 
-Un paquete `zip` se crea en el directorio `target` y contiene la aplicación enlazada con un `JRE` incluido. 
-El paquete se puede descomprimir en cualquier directorio y luego la aplicación se puede ejecutar directamente desde ahí. El ejecutable se llama `rucconv` y se encuentra en el directorio `bin/`.
+Al terminar debe haber un paquete zip en el directorio `target` y contiene la aplicación enlazada con un `JRE` incluido. 
+El paquete es distribuible se puede descomprimir en cualquier directorio y la aplicación se puede ejecutar directamente desde ahí.
+En Linux, el ejecutable se llama `rucconv` y se encuentra en el directorio `bin/`. 
+En Windows, el ejecutable es un script con nombre `rucconv.bat` y se encuentra en el directorio `\bin`.
 
 
 
