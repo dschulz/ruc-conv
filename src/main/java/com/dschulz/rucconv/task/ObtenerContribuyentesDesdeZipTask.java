@@ -153,6 +153,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
             entry("G?INEVE", "GÜINEVE"),
             entry("GERRE?O", "GUERREÑO"),
             entry("GORO?OSKI", "GOROÑOSKI"),
+            entry("G¿TZE", "GÖTZE"),
             entry("GRA?A", "GRAÑA"),
             entry("GRA¿A", "GRAÑA"),
             entry("GRI?O", "GRIÑO"),
@@ -180,6 +181,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
             entry("IBAÃ¿Â¿¿EZ", "IBÁÑEZ"),
             entry("IVAÃ¿â¿¿EZ", "IVÁÑEZ"),
             entry("JA¿A", "JAÑA"),
+            entry("JO¿O", "JOÃO"),
             entry("J¿RGEN", "JÜRGEN"),
             entry("K?NG", "KÜNG"),
             entry("KR?GER", "KRÜGER"), // KRÖGER o KRÜGER ?
@@ -830,7 +832,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
 
         updateProgress(0, 100);
         updateTitle(fileName);
-        updateMessage("Procesando basura de la SET... " + fileName);
+        updateMessage("Procesando basura de la DNIT... " + fileName);
 
 
         List<Contribuyente> lista = obtenerListaDesdeZip(f);
@@ -873,7 +875,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
     private Collection<? extends Contribuyente> parseEntry(ZipFile zipFile, ZipEntry entry) {
         List<Contribuyente> parsed = new ArrayList<>();
 
-        var lineaConverter = lineaConverter();
+        var converter = lineaConverter();
 
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry), StandardCharsets.UTF_8))) {
             long cnt = 0;
@@ -898,14 +900,14 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
 //                    continue;
 //                }
 
-                // Hay "CANCELADO" y "CANCELADO DEFINITIVO"
+                // Hay estados "CANCELADO" y "CANCELADO DEFINITIVO"
                 String estado = campos[STATUS.pos].toUpperCase();
-                if (estado.startsWith("CANCE")){
+                if (estado.startsWith("CANC")){
                     //System.err.println("RUC cancelado");
-                    continue;
+                    continue; // ignorar
                 }
 
-                parsed.add(lineaConverter.apply(campos));
+                parsed.add(converter.apply(campos));
             }
 
 
@@ -927,17 +929,17 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
                 String rucAnterior = campos[RUC_ANTERIOR.pos];
                 String estado = campos[STATUS.pos];
                 boolean activo = campos[STATUS.pos].equalsIgnoreCase("activo");
-
                 String notas = analizar(campos);
+
                 return new Contribuyente(ruc, denominacion, denominacionCorregida, dv, rucAnterior, estado, activo, notas);
             } else {
-                return null;
+                 return null;
             }
         };
     }
 
 
-    private String corregir(String denominacion) {
+    private String corregir(final String denominacion) {
 
         String copia = denominacion.trim().replaceAll("\"", "")
             .replaceAll("^(\\.,\\s*)(.*)$", "$2")
@@ -946,6 +948,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
             .replaceAll("¨", "")
             .replaceAll("´", "")
             .replaceAll("`", "")
+            .replaceAll("·", "")
             .replaceAll("\\.-", "")
             .replaceAll("`", "")
             .replaceAll("\\s{2,}", " ")
@@ -997,7 +1000,7 @@ public class ObtenerContribuyentesDesdeZipTask extends Task<List<Contribuyente>>
         return null;
     }
 
-    private String analizar(String[] r) {
+    private String analizar(final String[] r) {
 
         final StringBuilder sb = new StringBuilder();
 

@@ -35,7 +35,7 @@ public class PostgresDialectRucPrinter extends PrintWriter implements RecordList
 
 
         this.println("-- Volcado RUCs para PostgreSQL");
-        this.println("-- Recuperado de la basura que publica la SET");
+        this.println("-- Recuperado de la basura que publica la DNIT");
         this.println(String.format("-- %s ", LocalDateTime.now()));
         this.println();
 

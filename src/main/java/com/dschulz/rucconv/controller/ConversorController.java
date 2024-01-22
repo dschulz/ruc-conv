@@ -93,7 +93,7 @@ public class ConversorController {
 
         cargarButton.setDisable(false);
 
-        if (files != null && files.size() > 0) {
+        if (files != null && !files.isEmpty()) {
             procesarArchivos(files);
         }
     }
@@ -106,29 +106,26 @@ public class ConversorController {
 
     private MenuItem nuevoItem(String textoMenu, Runnable callback) {
         MenuItem item = new MenuItem(textoMenu);
-        item.setOnAction(e -> {
-            callback.run();
-        });
+        item.setOnAction(e -> callback.run());
         return item;
     }
 
-    private File getOutputFile(String nombrePreferido){
+    private File getOutputFile(String prefName) {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(getHomePath());
-        fileChooser.setInitialFileName(nombrePreferido);
+        fileChooser.setInitialFileName(prefName);
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Archivos SQL (*.sql)", "*.sql"));
 
         return fileChooser.showSaveDialog(stage);
-
     }
 
     private MenuItem[] exportarMenuItems() {
 
         var exportarSqliteSimple = nuevoItem("SQL para SQLite3 (simple)", () -> {
 
-            File salida = getOutputFile("rucs-sqlite3-simple.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-sqlite3-simple.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -139,41 +136,37 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarGzippedSqliteSimple = nuevoItem("SQL.gz para SQLite3 (simple)", () -> {
 
-            File salida = getOutputFile("rucs-sqlite3-simple.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-sqlite3-simple.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                    SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos,true)
+                    SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos, true)
                 ) {
                     rucPrinter.export(rucsTableView.getItems());
                     rucPrinter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -181,8 +174,8 @@ public class ConversorController {
 
         var exportarSqlite = nuevoItem("SQL para SQLite3", () -> {
 
-            File salida = getOutputFile("rucs-sqlite3.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-sqlite3.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -193,41 +186,37 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarGzippedSqlite = nuevoItem("SQL.gz para SQLite3", () -> {
 
-            File salida = getOutputFile("rucs-sqlite3.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-sqlite3.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                    SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos,true)
+                    SqliteRucPrinter rucPrinter = new SqliteRucPrinter(fos, true)
                 ) {
                     rucPrinter.export(rucsTableView.getItems());
                     rucPrinter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -235,8 +224,8 @@ public class ConversorController {
 
         var exportarMsSqlServer = nuevoItem("SQL para MS SqlServer", () -> {
 
-            File salida = getOutputFile("rucs-mssqlserver.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-mssqlserver.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -247,41 +236,37 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarGzippedMsSqlServer = nuevoItem("SQL.gz para MS SqlServer", () -> {
 
-            File salida = getOutputFile("rucs-mssqlserver.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-mssqlserver.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                    MSSqlServerRucPrinter rucPrinter = new MSSqlServerRucPrinter(fos,true)
+                    MSSqlServerRucPrinter rucPrinter = new MSSqlServerRucPrinter(fos, true)
                 ) {
                     rucPrinter.export(rucsTableView.getItems());
                     rucPrinter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -289,8 +274,8 @@ public class ConversorController {
 
         var exportarOracle = nuevoItem("SQL para Oracle", () -> {
 
-            File salida = getOutputFile("rucs-oracle.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-oracle.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -301,13 +286,11 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -315,28 +298,26 @@ public class ConversorController {
 
         var exportarGzippedOracle = nuevoItem("SQL.gz para Oracle", () -> {
 
-            File salida = getOutputFile("rucs-oracle.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-oracle.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                    OracleDialectRucPrinter exporter = new OracleDialectRucPrinter(fos,true)
+                    OracleDialectRucPrinter exporter = new OracleDialectRucPrinter(fos, true)
                 ) {
                     exporter.export(rucsTableView.getItems());
                     exporter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -344,8 +325,8 @@ public class ConversorController {
 
         var exportarPostgres = nuevoItem("SQL para PostgreSQL", () -> {
 
-            File salida = getOutputFile("rucs-postgresql.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-postgresql.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -356,48 +337,44 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarGzippedPostgres = nuevoItem("SQL.gz para PostgreSQL", () -> {
 
-            File salida = getOutputFile("rucs-postgresql.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-postgresql.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                     PostgresDialectRucPrinter exporter = new PostgresDialectRucPrinter(fos,true)
+                     PostgresDialectRucPrinter exporter = new PostgresDialectRucPrinter(fos, true)
                 ) {
                     exporter.export(rucsTableView.getItems());
                     exporter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarH2 = nuevoItem("SQL para H2", () -> {
 
-            File salida = getOutputFile("rucs-h2db.sql");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-h2db.sql");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -408,13 +385,11 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -422,8 +397,8 @@ public class ConversorController {
 
         var exportarGzippedH2 = nuevoItem("SQL.gz para H2", () -> {
 
-            File salida = getOutputFile("rucs-h2db.sql.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs-h2db.sql.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -436,13 +411,11 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados.")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados.")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -450,8 +423,8 @@ public class ConversorController {
 
         var exportarJson = nuevoItem("JSON", () -> {
 
-            File salida = getOutputFile("rucs.json");
-            if(null==salida)
+            File salida = getOutputFile("RUCs.json");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -462,49 +435,45 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados a JSON")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados a JSON")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
         var exportarGzippedJson = nuevoItem("JSON.gz", () -> {
 
-            File salida = getOutputFile("rucs.json.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs.json.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (
                     GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                     JsonRucPrinter exporter = new JsonRucPrinter(fos,true)
+                    JsonRucPrinter exporter = new JsonRucPrinter(fos, true)
                 ) {
                     exporter.export(rucsTableView.getItems());
                     exporter.flush(); // escribir
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados a JSON")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados a JSON")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
-        var exportarCsv =  nuevoItem("CSV", () -> {
+        var exportarCsv = nuevoItem("CSV", () -> {
 
-            File salida = getOutputFile("rucs.csv");
-            if(null==salida)
+            File salida = getOutputFile("RUCs.csv");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
@@ -515,41 +484,37 @@ public class ConversorController {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados a CSV")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados a CSV")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
 
 
-        var exportarGzippedCsv =  nuevoItem("CSV.gz", () -> {
+        var exportarGzippedCsv = nuevoItem("CSV.gz", () -> {
 
-            File salida = getOutputFile("rucs.csv.gz");
-            if(null==salida)
+            File salida = getOutputFile("RUCs.csv.gz");
+            if (null == salida)
                 return;
 
             Thread exportThread = new Thread(() -> {
 
                 try (GZIPOutputStream fos = new GZIPOutputStream(new FileOutputStream(salida));
-                     CsvRucPrinter exporter = new CsvRucPrinter(fos,true)
-                ){
+                     CsvRucPrinter exporter = new CsvRucPrinter(fos, true)
+                ) {
                     exporter.export(rucsTableView.getItems());
                     exporter.flush();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-                Platform.runLater(() -> {
-                    Notifications.create()
-                        .title("Finalizado")
-                        .text("Registros exportados a CSV")
-                        .position(Pos.TOP_CENTER)
-                        .showInformation();
-                });
+                Platform.runLater(() -> Notifications.create()
+                    .title("Finalizado")
+                    .text("Registros exportados a CSV")
+                    .position(Pos.TOP_CENTER)
+                    .showInformation());
             });
             exportThread.start();
         });
@@ -574,7 +539,7 @@ public class ConversorController {
             exportarGzippedPostgres,
             exportarGzippedH2,
             exportarGzippedOracle
-         };
+        };
     }
 
     private MenuItem[] seleccionMenuItems() {
@@ -605,19 +570,14 @@ public class ConversorController {
             final ClipboardContent content = new ClipboardContent();
 
             if (selectedItems.size() == 1) {
-                Contribuyente c = selectedItems.get(0);
+                Contribuyente c = selectedItems.getFirst();
                 content.putString(String.format("%s %s-%d", c.getDenominacion(), c.getRuc(), c.getVerificador()));
                 Clipboard.getSystemClipboard().setContent(content);
             }
 
         });
 
-        var serrSeleccion = nuevoItem("Volcar a la salida de error", () -> {
-            selectedItems.forEach((item) -> {
-                System.err.println("REGISTRO: " + item.getRuc() + " | " + item.getDenominacion());
-            });
-
-        });
+        var serrSeleccion = nuevoItem("Volcar a la salida de error", () -> selectedItems.forEach((item) -> System.err.println("REGISTRO: " + item.getRuc() + " | " + item.getDenominacion())));
 
         return new MenuItem[]{
             serrSeleccion,
@@ -658,7 +618,6 @@ public class ConversorController {
         recordCountTextField.setDisable(true);
 
 
-
     }
 
     private Button getPlaceholderCargarButton() {
@@ -674,13 +633,15 @@ public class ConversorController {
 
     private void procesarArchivos(List<File> files) {
 
-        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        //ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+        //ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+
+
+
         TaskProgressView<ObtenerContribuyentesDesdeZipTask> taskProgressView = new TaskProgressView<>();
         List<ObtenerContribuyentesDesdeZipTask> tasks = new ArrayList<>();
 
         cargarButton.setDisable(true);
-
 
         for (File f : files) {
             ObtenerContribuyentesDesdeZipTask task = getTask(f.getAbsolutePath());
@@ -698,15 +659,13 @@ public class ConversorController {
         popup.getContent().add(taskProgressView);
         popup.show(stage);
 
-        executorService.shutdown();
-
         new Thread(() -> {
             try {
-                boolean ok = executorService.awaitTermination(1, TimeUnit.MINUTES);
+                boolean ok = executorService.awaitTermination(5, TimeUnit.MINUTES);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-               // executorService.close();
+
                 Platform.runLater(popup::hide);
                 Platform.runLater(() -> {
                     ObservableList<Contribuyente> colectados = FXCollections.observableArrayList();
@@ -722,6 +681,9 @@ public class ConversorController {
                 });
             }
         }).start();
+
+        executorService.shutdown();
+
     }
 
     private ObtenerContribuyentesDesdeZipTask getTask(String zipFilePath) {

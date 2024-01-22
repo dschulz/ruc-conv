@@ -54,7 +54,7 @@ public class MSSqlServerRucPrinter extends PrintWriter implements RecordListExpo
 
 
         this.println("-- Volcado RUCs para MS SqlServer");
-        this.println("-- Recuperado de la basura que publica la SET");
+        this.println("-- Recuperado de la basura que publica la DNIT");
         this.println(String.format("-- %s ", INSTANTE));
         this.println();
         this.println();

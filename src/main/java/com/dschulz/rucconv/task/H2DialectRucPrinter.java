@@ -35,7 +35,7 @@ public class H2DialectRucPrinter extends PrintWriter implements RecordListExport
 
 
         this.println("-- Volcado RUCs para H2");
-        this.println("-- Recuperado de la basura que publica la SET");
+        this.println("-- Recuperado de la basura que publica la DNIT");
         this.println(String.format("-- %s ", LocalDateTime.now()));
         this.println();
 

@@ -67,7 +67,7 @@ INSERT INTO ruc_fts (doc, denominacion) SELECT doc, denominacion FROM ruc;
 
 
         this.println("-- Volcado RUCs para SQLite3");
-        this.println("-- Recuperado de la basura que publica la SET");
+        this.println("-- Recuperado de la basura que publica la DNIT");
         this.println(String.format("-- %s ",  INSTANTE));
         this.println();
         this.println(".echo off");

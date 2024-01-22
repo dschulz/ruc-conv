@@ -36,7 +36,7 @@ public class OracleDialectRucPrinter extends PrintWriter implements RecordListEx
 
 
         this.println("-- Volcado RUCs para Oracle");
-        this.println("-- Recuperado de la basura que publica la SET");
+        this.println("-- Recuperado de la basura que publica la DNIT");
         this.println(String.format("-- %s ", LocalDateTime.now()));
         this.println();
 
